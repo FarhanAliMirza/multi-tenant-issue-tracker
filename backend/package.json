@@ -1,30 +1,45 @@
 {
-  "name": "finance-bot",
+  "name": "multi-tenant-issue-tracker-backend",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "npx prisma generate && tsc",
-    "start": "npm run build && node dist/index.js",
-    "dev": "ts-node src/index.ts"
+  "description": "Backend API for the multi-tenant issue tracker",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=20"
   },
-  "keywords": [],
+  "scripts": {
+    "build": "prisma generate && tsc",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "start": "node dist/server.js"
+  },
+  "keywords": [
+    "express",
+    "multitenant",
+    "prisma",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.20.0",
+    "zod": "^4.3.5"
+  },
   "devDependencies": {
-    "@types/node": "^25.0.8",
-    "@types/pg": "^8.16.0",
-    "dotenv": "^17.2.3",
-    "prisma": "^7.2.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.5.0",
+    "@types/pg": "^8.18.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^7.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@prisma/adapter-neon": "^7.2.0",
-    "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^7.2.0",
-    "express": "^5.2.1",
-    "pg": "^8.16.3",
-    "zod": "^4.3.5"
   }
 }
