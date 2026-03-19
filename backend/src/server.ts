@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import express from "express";
 
 import { errorMiddleware } from "./middleware/error.middleware";
+import { authRouter } from "./routes/auth.routes";
+import { issueRouter } from "./routes/issue.routes";
 
 dotenv.config();
 
@@ -15,6 +17,15 @@ app.get("/health", (_req, res) => {
     success: true,
     message: "Backend server is running",
   });
+});
+
+app.use("/auth", authRouter);
+app.use("/issues", issueRouter);
+
+app.use((_req, _res, next) => {
+  const error = new Error("Route not found");
+  (error as Error & { statusCode: number }).statusCode = 404;
+  next(error);
 });
 
 app.use(errorMiddleware);
