@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 
+import { errorMiddleware } from "./middleware/error.middleware";
+
 dotenv.config();
 
 const app = express();
@@ -14,6 +16,8 @@ app.get("/health", (_req, res) => {
     message: "Backend server is running",
   });
 });
+
+app.use(errorMiddleware);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
