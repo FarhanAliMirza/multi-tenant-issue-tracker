@@ -7,7 +7,6 @@ tech.md
 .next/
 /next/
 out/
-next-app/
 # Production build files
 dist/
 build/
