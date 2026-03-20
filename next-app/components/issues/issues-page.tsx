@@ -1,0 +1,161 @@
+"use client"
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+
+interface Issue {
+  id: string
+  title: string
+  description: string
+  createdAt: string
+}
+
+export default function IssuesPage() {
+  const [issues, setIssues] = useState<Issue[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [showForm, setShowForm] = useState(false)
+
+  useEffect(() => {
+    async function fetchIssues() {
+      setLoading(true)
+      setError("")
+      try {
+        const res = await fetch("http://localhost:4000/api/issues", {
+          credentials: "include",
+        })
+        if (!res.ok) {
+          setError("Failed to fetch issues")
+          setIssues([])
+        } else {
+          setIssues(await res.json())
+        }
+      } catch {
+        setError("Network error")
+        setIssues([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchIssues()
+  }, [])
+
+  return (
+    <div className="mx-auto max-w-2xl py-8">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-xl font-semibold">Issues</h2>
+        <Button
+          onClick={() => setShowForm((f) => !f)}
+          variant={showForm ? "outline" : "default"}
+        >
+          {showForm ? "Cancel" : "New Issue"}
+        </Button>
+      </div>
+      {showForm && (
+        <NewIssueForm onCreated={(issue) => setIssues((i) => [issue, ...i])} />
+      )}
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div className="text-destructive">{error}</div>
+      ) : issues.length === 0 ? (
+        <div className="text-muted-foreground">No issues found.</div>
+      ) : (
+        <ul className="space-y-4">
+          {issues.map((issue) => (
+            <li
+              key={issue.id}
+              className="rounded border bg-card p-4 transition hover:shadow"
+            >
+              <a href={`/issues/${issue.id}`} className="block">
+                <div className="mb-1 text-lg font-medium">{issue.title}</div>
+                <div className="mb-1 text-sm text-muted-foreground">
+                  {issue.description}
+                </div>
+                <div className="flex gap-4 text-xs text-muted-foreground">
+                  <span>{new Date(issue.createdAt).toLocaleString()}</span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function NewIssueForm({ onCreated }: { onCreated: (issue: Issue) => void }) {
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    priority: "MEDIUM",
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch("http://localhost:4000/api/issues", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || "Failed to create issue")
+      } else {
+        const issue = await res.json()
+        onCreated(issue)
+        setForm({ title: "", description: "", priority: "MEDIUM" })
+      }
+    } catch {
+      setError("Network error")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="mb-6 space-y-3 rounded border bg-card p-4"
+    >
+      <input
+        className="w-full rounded border px-3 py-2 text-sm"
+        type="text"
+        placeholder="Title"
+        value={form.title}
+        onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+        required
+      />
+      <textarea
+        className="w-full rounded border px-3 py-2 text-sm"
+        placeholder="Description"
+        value={form.description}
+        onChange={(e) =>
+          setForm((f) => ({ ...f, description: e.target.value }))
+        }
+        required
+      />
+      <select
+        className="w-full rounded border px-3 py-2 text-sm"
+        value={form.priority}
+        onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
+        required
+      >
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Creating..." : "Create Issue"}
+      </Button>
+      {error && <div className="text-sm text-destructive">{error}</div>}
+    </form>
+  )
+}
