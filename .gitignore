@@ -5,7 +5,7 @@ tech.md
 
 # Next.js build output
 .next/
-/next/
+/.next/
 out/
 # Production build files
 dist/

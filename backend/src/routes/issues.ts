@@ -16,6 +16,19 @@ router.get("/", async (req, res) => {
   res.json(issues);
 });
 
+// GET /api/issues/:id
+router.get("/:id", async (req, res) => {
+  const issue = await prisma.issue.findFirst({
+    where: {
+      id: req.params.id,
+      tenantId: req.user!.tenantId,
+    },
+    include: { createdBy: { select: { email: true } } },
+  });
+  if (!issue) return res.status(404).json({ error: "Issue not found" });
+  res.json(issue);
+});
+
 // POST /api/issues
 router.post("/", async (req, res) => {
   const { title, description, priority } = req.body;
