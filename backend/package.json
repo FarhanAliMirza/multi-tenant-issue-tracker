@@ -11,7 +11,8 @@
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [
     "express",
@@ -25,6 +26,8 @@
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
@@ -33,7 +36,8 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.3",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",

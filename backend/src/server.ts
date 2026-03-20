@@ -1,35 +1,21 @@
-import dotenv from "dotenv";
 import express from "express";
-
-import { errorMiddleware } from "./middleware/error.middleware";
-import { authRouter } from "./routes/auth.routes";
-import { issueRouter } from "./routes/issue.routes";
-
-dotenv.config();
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth";
+import issuesRouter from "./routes/issues";
 
 const app = express();
-const port = Number(process.env.PORT ?? 5000);
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+app.use(cookieParser());
 app.use(express.json());
 
-app.get("/health", (_req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Backend server is running",
-  });
-});
+app.use("/api/auth", authRouter);
+app.use("/api/issues", issuesRouter);
 
-app.use("/auth", authRouter);
-app.use("/issues", issueRouter);
-
-app.use((_req, _res, next) => {
-  const error = new Error("Route not found");
-  (error as Error & { statusCode: number }).statusCode = 404;
-  next(error);
-});
-
-app.use(errorMiddleware);
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.listen(4000, () => console.log("API running on :4000"));

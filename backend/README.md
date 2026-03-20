@@ -1,156 +1,140 @@
-# Multi-Tenant Issue Tracker Backend
+# Multi-Tenant Issue Tracker API Documentation
 
-## Overview
-
-This backend provides a secure, multi-tenant issue tracking API built with Node.js, Express, TypeScript, Prisma (Postgres), Zod, JWT, and bcrypt. It enforces strict tenant isolation and robust authentication.
-
----
-
-## API Endpoints
-
-### Auth
-
-#### POST `/auth/register`
-
-- **Description:** Register a new user (and tenant).
-- **Request Body:**
-  ```json
-  {
-    "email": "user@example.com",
-    "password": "yourPassword123",
-    "tenant": "tenant-name"
-  }
-  ```
-- **Response:**
-  - `201 Created` with `{ token: <JWT> }`
-
-#### POST `/auth/login`
-
-- **Description:** Login as an existing user.
-- **Request Body:**
-  ```json
-  {
-    "email": "user@example.com",
-    "password": "yourPassword123"
-  }
-  ```
-- **Response:**
-  - `200 OK` with `{ token: <JWT> }`
+## Tech Stack
+- **Node.js**
+- **Express**
+- **Prisma ORM**
+- **PostgreSQL**
+- **TypeScript**
+- **JWT Authentication (httpOnly cookies)**
+- **bcrypt** (password hashing)
+- **cookie-parser, cors** (middleware)
 
 ---
 
-### Issues (Protected, requires `Authorization: Bearer <token>` header)
+## Authentication Endpoints
 
-#### POST `/issues`
-
-- **Description:** Create a new issue for the current tenant.
-- **Request Body:**
+### Register
+- **POST** `/api/auth/register`
+- **Body:**
   ```json
   {
-    "title": "Bug: Cannot login",
-    "description": "Login fails with 500 error"
+    "email": "alice@acme.com",
+    "password": "password123",
+    "tenantSlug": "acme"
   }
   ```
 - **Response:**
-  - `201 Created` with the created issue object
+  - Sets JWT cookie
+  - `{ message: 'Registered', user: { id, email } }`
 
-#### GET `/issues`
-
-- **Description:** List all issues for the current tenant.
-- **Response:**
-  - `200 OK` with array of issues
-
-#### GET `/issues/:id`
-
-- **Description:** Get a specific issue by ID (must belong to your tenant).
-- **Response:**
-  - `200 OK` with issue object, or `404 Not Found`
-
-#### PATCH `/issues/:id`
-
-- **Description:** Update an issue (must belong to your tenant).
-- **Request Body:** (any subset of fields)
+### Login
+- **POST** `/api/auth/login`
+- **Body:**
   ```json
   {
-    "title": "Updated title",
-    "description": "Updated description"
+    "email": "alice@acme.com",
+    "password": "password123"
   }
   ```
 - **Response:**
-  - `200 OK` with updated issue, or `404 Not Found`
+  - Sets JWT cookie
+  - `{ message: 'Logged in', user: { id, email, tenantId } }`
 
-#### DELETE `/issues/:id`
-
-- **Description:** Delete an issue (must belong to your tenant).
+### Logout
+- **POST** `/api/auth/logout`
 - **Response:**
-  - `204 No Content` or `404 Not Found`
+  - Clears JWT cookie
+  - `{ message: 'Logged out' }`
 
 ---
 
-### Health
+## Issue Endpoints (Protected)
+> All requests require authentication (JWT cookie)
 
-#### GET `/health`
-
-- **Description:** Health check endpoint.
+### Get All Issues
+- **GET** `/api/issues`
 - **Response:**
-  - `200 OK` with `{ status: "ok" }`
+  ```json
+  [
+    {
+      "id": "...",
+      "tenantId": "...",
+      "createdById": "...",
+      "title": "Fix login bug",
+      "description": "Users cannot log in.",
+      "status": "OPEN",
+      "priority": "HIGH",
+      "createdAt": "...",
+      "updatedAt": "...",
+      "createdBy": { "email": "alice@acme.com" }
+    },
+    // ...
+  ]
+  ```
+
+### Create Issue
+- **POST** `/api/issues`
+- **Body:**
+  ```json
+  {
+    "title": "Broken dashboard",
+    "description": "Graphs not loading.",
+    "priority": "HIGH"
+  }
+  ```
+- **Response:**
+  - Status 201
+  - Issue object
+
+### Update Issue
+- **PATCH** `/api/issues/:id`
+- **Body:** (any fields to update)
+  ```json
+  {
+    "title": "Update docs",
+    "status": "IN_PROGRESS"
+  }
+  ```
+- **Response:**
+  - Updated issue object
+
+### Delete Issue
+- **DELETE** `/api/issues/:id`
+- **Response:**
+  - Status 204 (no content)
 
 ---
 
 ## Demo Data
 
-To demo the API, use the following sample data:
+### Tenants
+- Acme Corp (`acme`)
+- Globex Inc (`globex`)
+- Initech LLC (`initech`)
 
-### Register Tenant A
+### Users
+- `alice@acme.com` / `password123` (Acme)
+- `bob@globex.com` / `password123` (Globex)
+- `carol@initech.com` / `password123` (Initech)
 
-```json
-{
-  "email": "alice@a.com",
-  "password": "password123",
-  "tenant": "tenant-a"
-}
-```
-
-### Register Tenant B
-
-```json
-{
-  "email": "bob@b.com",
-  "password": "password123",
-  "tenant": "tenant-b"
-}
-```
-
-### Create Issue (as Tenant A)
-
-```json
-{
-  "title": "First Issue",
-  "description": "This is a test issue."
-}
-```
+### Issues (examples)
+- Acme:
+  - Fix login bug (OPEN, HIGH)
+  - Update docs (IN_PROGRESS, MEDIUM)
+  - Refactor code (CLOSED, LOW)
+- Globex:
+  - Broken dashboard (OPEN, HIGH)
+  - Add dark mode (IN_PROGRESS, MEDIUM)
+  - Fix typo (CLOSED, LOW)
+- Initech:
+  - Performance lag (OPEN, HIGH)
+  - UI polish (IN_PROGRESS, MEDIUM)
+  - Remove unused code (CLOSED, LOW)
 
 ---
 
 ## Notes
-
-- All `/issues` endpoints require a valid JWT in the `Authorization` header.
-- Users can only access issues belonging to their own tenant.
-- Passwords are securely hashed.
-- All request bodies are validated with Zod schemas.
-
----
-
-## Quickstart
-
-1. Install dependencies: `npm install`
-2. Set up `.env` with your Postgres connection and JWT secret.
-3. Run migrations: `npx prisma migrate deploy`
-4. Start server: `npm run build && npm start`
-5. Use the above demo data with Postman, curl, or the provided checklist script.
-
----
-
-## Contact
-
-For questions or issues, contact the maintainer.
+- All data is tenant-isolated: users can only see and modify issues for their own tenant.
+- JWT is sent as an httpOnly cookie for all authentication.
+- All endpoints return errors in JSON format.

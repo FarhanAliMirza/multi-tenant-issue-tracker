@@ -9,10 +9,19 @@
 * 🟢 You can import this file directly.
 */
 
-export const IssueStatus = {
+export const Status = {
   OPEN: 'OPEN',
   IN_PROGRESS: 'IN_PROGRESS',
   CLOSED: 'CLOSED'
 } as const
 
-export type IssueStatus = (typeof IssueStatus)[keyof typeof IssueStatus]
+export type Status = (typeof Status)[keyof typeof Status]
+
+
+export const Priority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+} as const
+
+export type Priority = (typeof Priority)[keyof typeof Priority]

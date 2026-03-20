@@ -26,33 +26,36 @@ export type AggregateIssue = {
 
 export type IssueMinAggregateOutputType = {
   id: string | null
+  tenantId: string | null
+  createdById: string | null
   title: string | null
   description: string | null
-  status: $Enums.IssueStatus | null
-  tenantId: string | null
-  reporterId: string | null
+  status: $Enums.Status | null
+  priority: $Enums.Priority | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type IssueMaxAggregateOutputType = {
   id: string | null
+  tenantId: string | null
+  createdById: string | null
   title: string | null
   description: string | null
-  status: $Enums.IssueStatus | null
-  tenantId: string | null
-  reporterId: string | null
+  status: $Enums.Status | null
+  priority: $Enums.Priority | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type IssueCountAggregateOutputType = {
   id: number
+  tenantId: number
+  createdById: number
   title: number
   description: number
   status: number
-  tenantId: number
-  reporterId: number
+  priority: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -61,33 +64,36 @@ export type IssueCountAggregateOutputType = {
 
 export type IssueMinAggregateInputType = {
   id?: true
+  tenantId?: true
+  createdById?: true
   title?: true
   description?: true
   status?: true
-  tenantId?: true
-  reporterId?: true
+  priority?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type IssueMaxAggregateInputType = {
   id?: true
+  tenantId?: true
+  createdById?: true
   title?: true
   description?: true
   status?: true
-  tenantId?: true
-  reporterId?: true
+  priority?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type IssueCountAggregateInputType = {
   id?: true
+  tenantId?: true
+  createdById?: true
   title?: true
   description?: true
   status?: true
-  tenantId?: true
-  reporterId?: true
+  priority?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -167,11 +173,12 @@ export type IssueGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type IssueGroupByOutputType = {
   id: string
-  title: string
-  description: string
-  status: $Enums.IssueStatus
   tenantId: string
-  reporterId: string
+  createdById: string
+  title: string
+  description: string | null
+  status: $Enums.Status
+  priority: $Enums.Priority
   createdAt: Date
   updatedAt: Date
   _count: IssueCountAggregateOutputType | null
@@ -199,28 +206,30 @@ export type IssueWhereInput = {
   OR?: Prisma.IssueWhereInput[]
   NOT?: Prisma.IssueWhereInput | Prisma.IssueWhereInput[]
   id?: Prisma.StringFilter<"Issue"> | string
-  title?: Prisma.StringFilter<"Issue"> | string
-  description?: Prisma.StringFilter<"Issue"> | string
-  status?: Prisma.EnumIssueStatusFilter<"Issue"> | $Enums.IssueStatus
   tenantId?: Prisma.StringFilter<"Issue"> | string
-  reporterId?: Prisma.StringFilter<"Issue"> | string
+  createdById?: Prisma.StringFilter<"Issue"> | string
+  title?: Prisma.StringFilter<"Issue"> | string
+  description?: Prisma.StringNullableFilter<"Issue"> | string | null
+  status?: Prisma.EnumStatusFilter<"Issue"> | $Enums.Status
+  priority?: Prisma.EnumPriorityFilter<"Issue"> | $Enums.Priority
   createdAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type IssueOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
-  reporterId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
-  reporter?: Prisma.UserOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type IssueWhereUniqueInput = Prisma.AtLeast<{
@@ -228,24 +237,26 @@ export type IssueWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.IssueWhereInput | Prisma.IssueWhereInput[]
   OR?: Prisma.IssueWhereInput[]
   NOT?: Prisma.IssueWhereInput | Prisma.IssueWhereInput[]
-  title?: Prisma.StringFilter<"Issue"> | string
-  description?: Prisma.StringFilter<"Issue"> | string
-  status?: Prisma.EnumIssueStatusFilter<"Issue"> | $Enums.IssueStatus
   tenantId?: Prisma.StringFilter<"Issue"> | string
-  reporterId?: Prisma.StringFilter<"Issue"> | string
+  createdById?: Prisma.StringFilter<"Issue"> | string
+  title?: Prisma.StringFilter<"Issue"> | string
+  description?: Prisma.StringNullableFilter<"Issue"> | string | null
+  status?: Prisma.EnumStatusFilter<"Issue"> | $Enums.Status
+  priority?: Prisma.EnumPriorityFilter<"Issue"> | $Enums.Priority
   createdAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type IssueOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
-  reporterId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.IssueCountOrderByAggregateInput
@@ -258,11 +269,12 @@ export type IssueScalarWhereWithAggregatesInput = {
   OR?: Prisma.IssueScalarWhereWithAggregatesInput[]
   NOT?: Prisma.IssueScalarWhereWithAggregatesInput | Prisma.IssueScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Issue"> | string
-  title?: Prisma.StringWithAggregatesFilter<"Issue"> | string
-  description?: Prisma.StringWithAggregatesFilter<"Issue"> | string
-  status?: Prisma.EnumIssueStatusWithAggregatesFilter<"Issue"> | $Enums.IssueStatus
   tenantId?: Prisma.StringWithAggregatesFilter<"Issue"> | string
-  reporterId?: Prisma.StringWithAggregatesFilter<"Issue"> | string
+  createdById?: Prisma.StringWithAggregatesFilter<"Issue"> | string
+  title?: Prisma.StringWithAggregatesFilter<"Issue"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Issue"> | string | null
+  status?: Prisma.EnumStatusWithAggregatesFilter<"Issue"> | $Enums.Status
+  priority?: Prisma.EnumPriorityWithAggregatesFilter<"Issue"> | $Enums.Priority
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Issue"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Issue"> | Date | string
 }
@@ -270,21 +282,23 @@ export type IssueScalarWhereWithAggregatesInput = {
 export type IssueCreateInput = {
   id?: string
   title: string
-  description: string
-  status?: $Enums.IssueStatus
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutIssuesInput
-  reporter: Prisma.UserCreateNestedOneWithoutIssuesInput
+  createdBy: Prisma.UserCreateNestedOneWithoutIssuesInput
 }
 
 export type IssueUncheckedCreateInput = {
   id?: string
-  title: string
-  description: string
-  status?: $Enums.IssueStatus
   tenantId: string
-  reporterId: string
+  createdById: string
+  title: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -292,32 +306,35 @@ export type IssueUncheckedCreateInput = {
 export type IssueUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutIssuesNestedInput
-  reporter?: Prisma.UserUpdateOneRequiredWithoutIssuesNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutIssuesNestedInput
 }
 
 export type IssueUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  reporterId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type IssueCreateManyInput = {
   id?: string
-  title: string
-  description: string
-  status?: $Enums.IssueStatus
   tenantId: string
-  reporterId: string
+  createdById: string
+  title: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -325,19 +342,21 @@ export type IssueCreateManyInput = {
 export type IssueUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type IssueUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  reporterId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,33 +373,36 @@ export type IssueOrderByRelationAggregateInput = {
 
 export type IssueCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
-  reporterId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type IssueMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
-  reporterId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type IssueMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
-  reporterId?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -427,68 +449,78 @@ export type IssueUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.IssueScalarWhereInput | Prisma.IssueScalarWhereInput[]
 }
 
-export type IssueCreateNestedManyWithoutReporterInput = {
-  create?: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput> | Prisma.IssueCreateWithoutReporterInput[] | Prisma.IssueUncheckedCreateWithoutReporterInput[]
-  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutReporterInput | Prisma.IssueCreateOrConnectWithoutReporterInput[]
-  createMany?: Prisma.IssueCreateManyReporterInputEnvelope
+export type IssueCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput> | Prisma.IssueCreateWithoutCreatedByInput[] | Prisma.IssueUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutCreatedByInput | Prisma.IssueCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.IssueCreateManyCreatedByInputEnvelope
   connect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
 }
 
-export type IssueUncheckedCreateNestedManyWithoutReporterInput = {
-  create?: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput> | Prisma.IssueCreateWithoutReporterInput[] | Prisma.IssueUncheckedCreateWithoutReporterInput[]
-  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutReporterInput | Prisma.IssueCreateOrConnectWithoutReporterInput[]
-  createMany?: Prisma.IssueCreateManyReporterInputEnvelope
+export type IssueUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput> | Prisma.IssueCreateWithoutCreatedByInput[] | Prisma.IssueUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutCreatedByInput | Prisma.IssueCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.IssueCreateManyCreatedByInputEnvelope
   connect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
 }
 
-export type IssueUpdateManyWithoutReporterNestedInput = {
-  create?: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput> | Prisma.IssueCreateWithoutReporterInput[] | Prisma.IssueUncheckedCreateWithoutReporterInput[]
-  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutReporterInput | Prisma.IssueCreateOrConnectWithoutReporterInput[]
-  upsert?: Prisma.IssueUpsertWithWhereUniqueWithoutReporterInput | Prisma.IssueUpsertWithWhereUniqueWithoutReporterInput[]
-  createMany?: Prisma.IssueCreateManyReporterInputEnvelope
+export type IssueUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput> | Prisma.IssueCreateWithoutCreatedByInput[] | Prisma.IssueUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutCreatedByInput | Prisma.IssueCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.IssueUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.IssueUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.IssueCreateManyCreatedByInputEnvelope
   set?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   disconnect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   delete?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   connect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
-  update?: Prisma.IssueUpdateWithWhereUniqueWithoutReporterInput | Prisma.IssueUpdateWithWhereUniqueWithoutReporterInput[]
-  updateMany?: Prisma.IssueUpdateManyWithWhereWithoutReporterInput | Prisma.IssueUpdateManyWithWhereWithoutReporterInput[]
+  update?: Prisma.IssueUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.IssueUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.IssueUpdateManyWithWhereWithoutCreatedByInput | Prisma.IssueUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.IssueScalarWhereInput | Prisma.IssueScalarWhereInput[]
 }
 
-export type IssueUncheckedUpdateManyWithoutReporterNestedInput = {
-  create?: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput> | Prisma.IssueCreateWithoutReporterInput[] | Prisma.IssueUncheckedCreateWithoutReporterInput[]
-  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutReporterInput | Prisma.IssueCreateOrConnectWithoutReporterInput[]
-  upsert?: Prisma.IssueUpsertWithWhereUniqueWithoutReporterInput | Prisma.IssueUpsertWithWhereUniqueWithoutReporterInput[]
-  createMany?: Prisma.IssueCreateManyReporterInputEnvelope
+export type IssueUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput> | Prisma.IssueCreateWithoutCreatedByInput[] | Prisma.IssueUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.IssueCreateOrConnectWithoutCreatedByInput | Prisma.IssueCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.IssueUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.IssueUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.IssueCreateManyCreatedByInputEnvelope
   set?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   disconnect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   delete?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
   connect?: Prisma.IssueWhereUniqueInput | Prisma.IssueWhereUniqueInput[]
-  update?: Prisma.IssueUpdateWithWhereUniqueWithoutReporterInput | Prisma.IssueUpdateWithWhereUniqueWithoutReporterInput[]
-  updateMany?: Prisma.IssueUpdateManyWithWhereWithoutReporterInput | Prisma.IssueUpdateManyWithWhereWithoutReporterInput[]
+  update?: Prisma.IssueUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.IssueUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.IssueUpdateManyWithWhereWithoutCreatedByInput | Prisma.IssueUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.IssueScalarWhereInput | Prisma.IssueScalarWhereInput[]
 }
 
-export type EnumIssueStatusFieldUpdateOperationsInput = {
-  set?: $Enums.IssueStatus
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type EnumStatusFieldUpdateOperationsInput = {
+  set?: $Enums.Status
+}
+
+export type EnumPriorityFieldUpdateOperationsInput = {
+  set?: $Enums.Priority
 }
 
 export type IssueCreateWithoutTenantInput = {
   id?: string
   title: string
-  description: string
-  status?: $Enums.IssueStatus
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
-  reporter: Prisma.UserCreateNestedOneWithoutIssuesInput
+  createdBy: Prisma.UserCreateNestedOneWithoutIssuesInput
 }
 
 export type IssueUncheckedCreateWithoutTenantInput = {
   id?: string
+  createdById: string
   title: string
-  description: string
-  status?: $Enums.IssueStatus
-  reporterId: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -524,67 +556,71 @@ export type IssueScalarWhereInput = {
   OR?: Prisma.IssueScalarWhereInput[]
   NOT?: Prisma.IssueScalarWhereInput | Prisma.IssueScalarWhereInput[]
   id?: Prisma.StringFilter<"Issue"> | string
-  title?: Prisma.StringFilter<"Issue"> | string
-  description?: Prisma.StringFilter<"Issue"> | string
-  status?: Prisma.EnumIssueStatusFilter<"Issue"> | $Enums.IssueStatus
   tenantId?: Prisma.StringFilter<"Issue"> | string
-  reporterId?: Prisma.StringFilter<"Issue"> | string
+  createdById?: Prisma.StringFilter<"Issue"> | string
+  title?: Prisma.StringFilter<"Issue"> | string
+  description?: Prisma.StringNullableFilter<"Issue"> | string | null
+  status?: Prisma.EnumStatusFilter<"Issue"> | $Enums.Status
+  priority?: Prisma.EnumPriorityFilter<"Issue"> | $Enums.Priority
   createdAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Issue"> | Date | string
 }
 
-export type IssueCreateWithoutReporterInput = {
+export type IssueCreateWithoutCreatedByInput = {
   id?: string
   title: string
-  description: string
-  status?: $Enums.IssueStatus
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutIssuesInput
 }
 
-export type IssueUncheckedCreateWithoutReporterInput = {
+export type IssueUncheckedCreateWithoutCreatedByInput = {
   id?: string
-  title: string
-  description: string
-  status?: $Enums.IssueStatus
   tenantId: string
+  title: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type IssueCreateOrConnectWithoutReporterInput = {
+export type IssueCreateOrConnectWithoutCreatedByInput = {
   where: Prisma.IssueWhereUniqueInput
-  create: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput>
+  create: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput>
 }
 
-export type IssueCreateManyReporterInputEnvelope = {
-  data: Prisma.IssueCreateManyReporterInput | Prisma.IssueCreateManyReporterInput[]
+export type IssueCreateManyCreatedByInputEnvelope = {
+  data: Prisma.IssueCreateManyCreatedByInput | Prisma.IssueCreateManyCreatedByInput[]
   skipDuplicates?: boolean
 }
 
-export type IssueUpsertWithWhereUniqueWithoutReporterInput = {
+export type IssueUpsertWithWhereUniqueWithoutCreatedByInput = {
   where: Prisma.IssueWhereUniqueInput
-  update: Prisma.XOR<Prisma.IssueUpdateWithoutReporterInput, Prisma.IssueUncheckedUpdateWithoutReporterInput>
-  create: Prisma.XOR<Prisma.IssueCreateWithoutReporterInput, Prisma.IssueUncheckedCreateWithoutReporterInput>
+  update: Prisma.XOR<Prisma.IssueUpdateWithoutCreatedByInput, Prisma.IssueUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.IssueCreateWithoutCreatedByInput, Prisma.IssueUncheckedCreateWithoutCreatedByInput>
 }
 
-export type IssueUpdateWithWhereUniqueWithoutReporterInput = {
+export type IssueUpdateWithWhereUniqueWithoutCreatedByInput = {
   where: Prisma.IssueWhereUniqueInput
-  data: Prisma.XOR<Prisma.IssueUpdateWithoutReporterInput, Prisma.IssueUncheckedUpdateWithoutReporterInput>
+  data: Prisma.XOR<Prisma.IssueUpdateWithoutCreatedByInput, Prisma.IssueUncheckedUpdateWithoutCreatedByInput>
 }
 
-export type IssueUpdateManyWithWhereWithoutReporterInput = {
+export type IssueUpdateManyWithWhereWithoutCreatedByInput = {
   where: Prisma.IssueScalarWhereInput
-  data: Prisma.XOR<Prisma.IssueUpdateManyMutationInput, Prisma.IssueUncheckedUpdateManyWithoutReporterInput>
+  data: Prisma.XOR<Prisma.IssueUpdateManyMutationInput, Prisma.IssueUncheckedUpdateManyWithoutCreatedByInput>
 }
 
 export type IssueCreateManyTenantInput = {
   id?: string
+  createdById: string
   title: string
-  description: string
-  status?: $Enums.IssueStatus
-  reporterId: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -592,69 +628,76 @@ export type IssueCreateManyTenantInput = {
 export type IssueUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reporter?: Prisma.UserUpdateOneRequiredWithoutIssuesNestedInput
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutIssuesNestedInput
 }
 
 export type IssueUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
-  reporterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type IssueUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
-  reporterId?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type IssueCreateManyReporterInput = {
+export type IssueCreateManyCreatedByInput = {
   id?: string
-  title: string
-  description: string
-  status?: $Enums.IssueStatus
   tenantId: string
+  title: string
+  description?: string | null
+  status?: $Enums.Status
+  priority?: $Enums.Priority
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type IssueUpdateWithoutReporterInput = {
+export type IssueUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutIssuesNestedInput
 }
 
-export type IssueUncheckedUpdateWithoutReporterInput = {
+export type IssueUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type IssueUncheckedUpdateManyWithoutReporterInput = {
+export type IssueUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumIssueStatusFieldUpdateOperationsInput | $Enums.IssueStatus
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -663,81 +706,86 @@ export type IssueUncheckedUpdateManyWithoutReporterInput = {
 
 export type IssueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  tenantId?: boolean
+  createdById?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
-  tenantId?: boolean
-  reporterId?: boolean
+  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["issue"]>
 
 export type IssueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  tenantId?: boolean
+  createdById?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
-  tenantId?: boolean
-  reporterId?: boolean
+  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["issue"]>
 
 export type IssueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  tenantId?: boolean
+  createdById?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
-  tenantId?: boolean
-  reporterId?: boolean
+  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["issue"]>
 
 export type IssueSelectScalar = {
   id?: boolean
+  tenantId?: boolean
+  createdById?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
-  tenantId?: boolean
-  reporterId?: boolean
+  priority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IssueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "status" | "tenantId" | "reporterId" | "createdAt" | "updatedAt", ExtArgs["result"]["issue"]>
+export type IssueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "createdById" | "title" | "description" | "status" | "priority" | "createdAt" | "updatedAt", ExtArgs["result"]["issue"]>
 export type IssueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type IssueIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type IssueIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $IssuePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Issue"
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
-    reporter: Prisma.$UserPayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    title: string
-    description: string
-    status: $Enums.IssueStatus
     tenantId: string
-    reporterId: string
+    createdById: string
+    title: string
+    description: string | null
+    status: $Enums.Status
+    priority: $Enums.Priority
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["issue"]>
@@ -1135,7 +1183,7 @@ readonly fields: IssueFieldRefs;
 export interface Prisma__IssueClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  reporter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1166,11 +1214,12 @@ export interface Prisma__IssueClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface IssueFieldRefs {
   readonly id: Prisma.FieldRef<"Issue", 'String'>
+  readonly tenantId: Prisma.FieldRef<"Issue", 'String'>
+  readonly createdById: Prisma.FieldRef<"Issue", 'String'>
   readonly title: Prisma.FieldRef<"Issue", 'String'>
   readonly description: Prisma.FieldRef<"Issue", 'String'>
-  readonly status: Prisma.FieldRef<"Issue", 'IssueStatus'>
-  readonly tenantId: Prisma.FieldRef<"Issue", 'String'>
-  readonly reporterId: Prisma.FieldRef<"Issue", 'String'>
+  readonly status: Prisma.FieldRef<"Issue", 'Status'>
+  readonly priority: Prisma.FieldRef<"Issue", 'Priority'>
   readonly createdAt: Prisma.FieldRef<"Issue", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Issue", 'DateTime'>
 }
