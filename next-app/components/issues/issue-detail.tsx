@@ -21,9 +21,12 @@ export default function IssueDetail({ id }: { id: string }) {
       setLoading(true)
       setError("")
       try {
-        const res = await fetch(`http://localhost:4000/api/issues/${id}`, {
-          credentials: "include",
-        })
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
+          {
+            credentials: "include",
+          }
+        )
         if (!res.ok) {
           setError("Not found or unauthorized")
           setIssue(null)
@@ -45,10 +48,13 @@ export default function IssueDetail({ id }: { id: string }) {
     setLoading(true)
     setError("")
     try {
-      const res = await fetch(`http://localhost:4000/api/issues/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      )
       if (!res.ok) {
         setError("Failed to delete")
       } else {
@@ -85,12 +91,15 @@ export default function IssueDetail({ id }: { id: string }) {
     setLoading(true)
     setError("")
     try {
-      const res = await fetch(`http://localhost:4000/api/issues/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(editForm),
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(editForm),
+        }
+      )
       if (!res.ok) {
         const data = await res.json()
         setError(data.error || "Failed to update")

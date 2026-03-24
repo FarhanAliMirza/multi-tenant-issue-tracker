@@ -21,10 +21,13 @@ export default function IssuesPage() {
     setLoading(true)
     setError("")
     try {
-      const res = await fetch("http://localhost:4000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      )
       if (!res.ok) {
         setError("Logout failed")
       } else {
@@ -42,9 +45,12 @@ export default function IssuesPage() {
       setLoading(true)
       setError("")
       try {
-        const res = await fetch("http://localhost:4000/api/issues", {
-          credentials: "include",
-        })
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues`,
+          {
+            credentials: "include",
+          }
+        )
         if (!res.ok) {
           setError("Failed to fetch issues")
           setIssues([])
@@ -124,14 +130,17 @@ function NewIssueForm({ onCreated }: { onCreated: (issue: Issue) => void }) {
     setLoading(true)
     setError("")
     try {
-      const res = await fetch("http://localhost:4000/api/issues", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(form),
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(form),
+        }
+      )
       if (!res.ok) {
         const data = await res.json()
         setError(data.error || "Failed to create issue")
