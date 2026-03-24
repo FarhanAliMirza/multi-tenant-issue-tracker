@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {prisma} from "../lib/prisma";
+import { prisma } from "../lib/prisma";
 
 const router = express.Router();
 
@@ -37,6 +37,7 @@ router.post("/register", async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true,
     sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   res.json({ message: "Registered", user: { id: user.id, email: user.email } });
@@ -60,6 +61,7 @@ router.post("/login", async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true,
     sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   res.json({
@@ -70,7 +72,11 @@ router.post("/login", async (req, res) => {
 
 // POST /api/auth/logout
 router.post("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
   res.json({ message: "Logged out" });
 });
 
