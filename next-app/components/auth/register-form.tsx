@@ -1,12 +1,14 @@
 "use client"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export default function RegisterForm() {
   const [form, setForm] = useState({ email: "", password: "", tenantSlug: "" })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -66,6 +68,14 @@ export default function RegisterForm() {
       />
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? "Registering..." : "Register"}
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        onClick={() => router.push("/auth/login")}
+      >
+        Already registered? Login
       </Button>
       {error && <div className="text-sm text-destructive">{error}</div>}
       {success && <div className="text-sm text-green-600">{success}</div>}

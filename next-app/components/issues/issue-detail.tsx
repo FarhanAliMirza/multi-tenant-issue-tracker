@@ -112,6 +112,14 @@ export default function IssueDetail({ id }: { id: string }) {
 
   return (
     <div className="mx-auto max-w-lg py-8">
+      <Button
+        variant="outline"
+        className="mb-4"
+        onClick={() => router.push("/issues")}
+        disabled={loading}
+      >
+        ← Back to all issues
+      </Button>
       <div className="rounded border bg-card p-6 shadow">
         {editMode ? (
           <form onSubmit={handleEdit} className="space-y-3">

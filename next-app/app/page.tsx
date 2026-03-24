@@ -10,7 +10,7 @@ export default function Page() {
             Multi-Tenant Issue Tracker
           </h1>
           <p className="mb-2">
-            A secure, minimal issue tracker for multiple tenants. Register or
+            A secure issue tracker for multiple tenants and users. Register or
             log in to get started.
           </p>
           <div className="mt-4 flex gap-2">
@@ -19,9 +19,6 @@ export default function Page() {
             </Link>
             <Link href="/auth/login">
               <Button>Login</Button>
-            </Link>
-            <Link href="/issues">
-              <Button variant="secondary">View Issues</Button>
             </Link>
           </div>
         </div>

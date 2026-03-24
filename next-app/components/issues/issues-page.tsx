@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 interface Issue {
   id: string
@@ -14,6 +15,27 @@ export default function IssuesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [showForm, setShowForm] = useState(false)
+  const router = useRouter()
+
+  async function handleLogout() {
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch("http://localhost:4000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      })
+      if (!res.ok) {
+        setError("Logout failed")
+      } else {
+        router.push("/auth/login")
+      }
+    } catch {
+      setError("Network error")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     async function fetchIssues() {
@@ -43,12 +65,17 @@ export default function IssuesPage() {
     <div className="mx-auto max-w-2xl py-8">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-semibold">Issues</h2>
-        <Button
-          onClick={() => setShowForm((f) => !f)}
-          variant={showForm ? "outline" : "default"}
-        >
-          {showForm ? "Cancel" : "New Issue"}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setShowForm((f) => !f)}
+            variant={showForm ? "outline" : "default"}
+          >
+            {showForm ? "Cancel" : "New Issue"}
+          </Button>
+          <Button variant="outline" onClick={handleLogout} disabled={loading}>
+            Logout
+          </Button>
+        </div>
       </div>
       {showForm && (
         <NewIssueForm onCreated={(issue) => setIssues((i) => [issue, ...i])} />
