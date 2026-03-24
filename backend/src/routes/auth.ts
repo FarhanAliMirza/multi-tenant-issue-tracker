@@ -34,13 +34,11 @@ router.post("/register", async (req, res) => {
     process.env.JWT_SECRET!,
     { expiresIn: "7d" },
   );
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+  res.json({
+    message: "Registered",
+    token,
+    user: { id: user.id, email: user.email, tenantId: user.tenantId },
   });
-  res.json({ message: "Registered", user: { id: user.id, email: user.email } });
 });
 
 // POST /api/auth/login
@@ -58,25 +56,15 @@ router.post("/login", async (req, res) => {
     process.env.JWT_SECRET!,
     { expiresIn: "7d" },
   );
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
   res.json({
     message: "Logged in",
+    token,
     user: { id: user.id, email: user.email, tenantId: user.tenantId },
   });
 });
 
 // POST /api/auth/logout
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-  });
   res.json({ message: "Logged out" });
 });
 

@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { setAuthorizationToken } from "@/lib/auth"
 
 export default function RegisterForm() {
   const [form, setForm] = useState({ email: "", password: "", tenantSlug: "" })
@@ -29,7 +30,11 @@ export default function RegisterForm() {
         const data = await res.json()
         setError(data.error || "Registration failed")
       } else {
-        setSuccess("Registration successful! You can now log in.")
+        const data = await res.json()
+        if (data.token) {
+          setAuthorizationToken(data.token)
+        }
+        setSuccess("Registration successful! You are now authenticated.")
         setForm({ email: "", password: "", tenantSlug: "" })
       }
     } catch (err) {

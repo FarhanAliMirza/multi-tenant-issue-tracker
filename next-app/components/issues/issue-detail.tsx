@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { getAuthorizationToken } from "@/lib/auth"
 
 interface Issue {
   id: string
@@ -21,10 +22,17 @@ export default function IssueDetail({ id }: { id: string }) {
       setLoading(true)
       setError("")
       try {
+        const authorization = getAuthorizationToken()
+        if (!authorization) {
+          setError("Not authenticated")
+          setIssue(null)
+          router.push("/auth/login")
+          return
+        }
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
           {
-            credentials: "include",
+            headers: { Authorization: authorization },
           }
         )
         if (!res.ok) {
@@ -41,18 +49,23 @@ export default function IssueDetail({ id }: { id: string }) {
       }
     }
     fetchIssue()
-  }, [id])
+  }, [id, router])
 
   async function handleDelete() {
     if (!confirm("Delete this issue?")) return
     setLoading(true)
     setError("")
     try {
+      const authorization = getAuthorizationToken()
+      if (!authorization) {
+        setError("Not authenticated")
+        return
+      }
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
         {
           method: "DELETE",
-          credentials: "include",
+          headers: { Authorization: authorization },
         }
       )
       if (!res.ok) {
@@ -91,12 +104,19 @@ export default function IssueDetail({ id }: { id: string }) {
     setLoading(true)
     setError("")
     try {
+      const authorization = getAuthorizationToken()
+      if (!authorization) {
+        setError("Not authenticated")
+        return
+      }
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues/${id}`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authorization,
+          },
           body: JSON.stringify(editForm),
         }
       )

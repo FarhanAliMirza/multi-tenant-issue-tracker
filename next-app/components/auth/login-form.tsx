@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { setAuthorizationToken } from "@/lib/auth"
 
 export default function LoginForm() {
   const [form, setForm] = useState({ email: "", password: "" })
@@ -29,6 +30,9 @@ export default function LoginForm() {
       if (!res.ok) {
         setError(data.error || "Login failed")
       } else {
+        if (data.token) {
+          setAuthorizationToken(data.token)
+        }
         setSuccess("Login successful! Redirecting...")
         // Optionally, redirect to issues page after login
         setTimeout(() => {

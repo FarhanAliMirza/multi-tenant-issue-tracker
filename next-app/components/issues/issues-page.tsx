@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { clearAuthorizationToken, getAuthorizationToken } from "@/lib/auth"
 
 interface Issue {
   id: string
@@ -21,16 +22,18 @@ export default function IssuesPage() {
     setLoading(true)
     setError("")
     try {
+      const authorization = getAuthorizationToken()
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`,
         {
           method: "POST",
-          credentials: "include",
+          headers: authorization ? { Authorization: authorization } : undefined,
         }
       )
       if (!res.ok) {
         setError("Logout failed")
       } else {
+        clearAuthorizationToken()
         router.push("/auth/login")
       }
     } catch {
@@ -45,10 +48,17 @@ export default function IssuesPage() {
       setLoading(true)
       setError("")
       try {
+        const authorization = getAuthorizationToken()
+        if (!authorization) {
+          setError("Not authenticated")
+          setIssues([])
+          router.push("/auth/login")
+          return
+        }
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues`,
           {
-            credentials: "include",
+            headers: { Authorization: authorization },
           }
         )
         if (!res.ok) {
@@ -65,7 +75,7 @@ export default function IssuesPage() {
       }
     }
     fetchIssues()
-  }, [])
+  }, [router])
 
   return (
     <div className="mx-auto max-w-2xl py-8">
@@ -130,14 +140,19 @@ function NewIssueForm({ onCreated }: { onCreated: (issue: Issue) => void }) {
     setLoading(true)
     setError("")
     try {
+      const authorization = getAuthorizationToken()
+      if (!authorization) {
+        setError("Not authenticated")
+        return
+      }
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/issues`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: authorization,
           },
-          credentials: "include",
           body: JSON.stringify(form),
         }
       )

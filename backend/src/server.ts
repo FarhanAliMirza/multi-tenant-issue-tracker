@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth";
 import issuesRouter from "./routes/issues";
 
@@ -12,7 +11,6 @@ app.use(
     credentials: true,
   }),
 );
-app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
